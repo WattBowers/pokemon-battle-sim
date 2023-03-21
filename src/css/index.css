@@ -1,0 +1,22 @@
+.wrapper {
+    max-width: 1600px;
+    width: 90%;
+    margin: 0 auto;
+    height: 100%;
+}
+
+* {
+    margin:0;
+    padding:0;
+}
+
+img {
+        width: 100%;
+        height: inherit;
+        display: block;
+}
+
+html {
+    font-size: 125%;
+    line-height: 1;
+}
