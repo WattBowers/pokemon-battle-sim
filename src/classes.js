@@ -8,4 +8,6 @@ class Pokemon {
     }
 }
 
+
+
 export { Pokemon }
