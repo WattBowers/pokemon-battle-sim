@@ -3,20 +3,30 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Pokemon } from './classes';
 import { hpCalc, statCalc } from './statCalc';
-import MoveButton from './MoveButton'
-import { attack, checkIfHpIsZero } from './attack';
+import MoveButton from './MoveButton';
+import CombatText from './CombatText';
+import { attack, checkIfHpIsZero, compareSpeed } from './attack';
 
 
 
 const BattleConsole = () => {
 
     const attackClicked = (move) => {
-        //this is the users attack
-        const userAttack = attack(computerPokemon, userPokemon, move)
-        setComputerHp(checkIfHpIsZero(computerHp, userAttack[0]))
-        //the computer will pick a random move and then attack back
-        const computerAttack = attack(userPokemon, computerPokemon, computerPokemon.moveArr[Math.floor(Math.random() * 3)])
-        setUserHp(checkIfHpIsZero(userHp, computerAttack[0]))
+
+        // decide which pokemon should go first. 
+        const speedArr = compareSpeed(userPokemon, computerPokemon)
+        //set the fastest pokemon to the first in the order
+        if(speedArr[0] === 'user') {
+            setCurrentPokemon('user')
+            setCurrentAttack(attack(computerPokemon, userPokemon, move))
+        } else {
+            setCurrentPokemon('computer')
+            setCurrentAttack(attack(userPokemon, computerPokemon, computerPokemon.moveArr[Math.floor(Math.random() * 3)]))
+        }
+
+
+        //set combat step to one. 
+        setCombatStep(1)
     }
 
     const idArr = [1, 4, 7]
@@ -24,8 +34,15 @@ const BattleConsole = () => {
     const [userPokemon, setUserPokemon] = useState({})
     const [computerPokemon, setComputerPokemon] = useState({})
 
+    const [currentAttack, setCurrentAttack] = useState()
+
     const [userHp, setUserHp] = useState(0);
     const [computerHp, setComputerHp] = useState(0);
+
+    const [currentPokemon, setCurrentPokemon] = useState('')
+
+    const [combatText, setCombatText] = useState('');
+    const [combatStep, setCombatStep] = useState(0)
 
     useEffect(() => {
         idArr.forEach(id => {
@@ -83,6 +100,72 @@ const BattleConsole = () => {
         }
     }, [computerPokemon])
 
+    useEffect(() => {
+        //make sure this doesn't run on page load. 
+       console.log(currentAttack)
+        if(combatStep !== 0) {
+            if(currentPokemon === 'user')
+                switch(combatStep) {
+                    case 1: 
+                        setCombatText(`${userPokemon.name} used ${currentAttack[3]}!!!`);
+                        break;
+                    
+                    case 2: 
+                        if(currentAttack[2] === 'super effective') {
+                            setCombatText(`It's super effective`);
+                        } else if (currentAttack[2] === 'not very effective') {
+                            setCombatText(`It's not very effective`);
+                        } else {
+                            setCombatStep(3);
+                        }
+                        break;
+                    
+                    case 3: 
+                        if(currentAttack[1] === true) {
+                            setCombatText(`critical hit!!!`);
+                        } else{
+                            setCombatStep(4)
+                        }
+                        break;
+                    case 4: 
+                        setCombatText(`${userPokemon.name} dealt ${Math.round(currentAttack[0])} to the opponents ${computerPokemon.name}`);
+                        setCurrentAttack(attack(userPokemon, computerPokemon, computerPokemon.moveArr[Math.floor(Math.random() * 3)]));
+                        break;
+                    
+                    case 5: 
+                        //setCombatText(`${computerPokemon.name} dealt ${Math.round(currentAttack[0])} to your ${userPokemon.name}`)
+                        setCombatText(`${computerPokemon.name} used ${currentAttack[3]}!!!`);
+                        break;
+                    case 6: 
+                        if(currentAttack[2] === 'super effective') {
+                            setCombatText(`It's super effective`);
+                        } else if (currentAttack[2] === 'not very effective') {
+                            setCombatText(`It's not very effective`);
+                        } else {
+                            setCombatStep(7);
+                        }
+                        break;
+                    
+                    case 7: 
+                        if(currentAttack[1] === true) {
+                            setCombatText(`critical hit!!!`);
+                        } else{
+                            setCombatStep(8)
+                        }
+                        break;
+                        
+                    case 8: 
+                        setCombatText(`${computerPokemon.name} dealt ${Math.round(currentAttack[0])} to your ${userPokemon.name}`);
+                        break;
+                    
+                    case 9: 
+                        setCombatText('')
+                        setCombatStep(0)
+                        break;
+                }
+        }
+    }, [combatStep])
+
 
     
     if (pokemon.length > 0) {
@@ -110,6 +193,7 @@ const BattleConsole = () => {
                     {userPokemon.moveArr?.map(move => {
                         return <MoveButton idToAttack={attackClicked} move={move} />
                     })}
+                    <CombatText combatStep={combatStep} setCombatStep={setCombatStep} text={combatText}/>
                 </div>
             )
         }
