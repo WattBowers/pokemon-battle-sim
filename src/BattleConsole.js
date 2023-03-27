@@ -256,7 +256,7 @@ const BattleConsole = () => {
                 }
             }    
         }        
-    }, [combatStep])
+    }, [state.combatStep])
 
 
     
