@@ -19,16 +19,13 @@ export const attack = (defender, attacker, move) => {
         //check how effective the move is against the opponent
         const damageArr = damageCalc(move[1], defender.stats[2], attacker.stats[1])
         const typeEffectiveness = checkMatchup(move[2], defender.type[0].type.name)
-        console.log(typeEffectiveness)
-        return [damageArr[0] * typeEffectiveness[0], damageArr[1], typeEffectiveness[1], move[0]]
+        return [Math.round(damageArr[0] * typeEffectiveness[0]), damageArr[1], typeEffectiveness[1], move[0]]
     } else if(move[3] === 'special') {
         //same as before just using the special stats instead of the physical ones. 
         
         const damageArr = damageCalc(move[1], defender.stats[4], attacker.stats[3])
         const typeEffectiveness = checkMatchup(move[2], defender.type[0].type.name)
-        console.log(typeEffectiveness)
-        console.log(move)
-        return [damageArr[0] * typeEffectiveness[0], damageArr[1], typeEffectiveness[1], move[0]]
+        return [Math.round(damageArr[0] * typeEffectiveness[0]), damageArr[1], typeEffectiveness[1], move[0]]
     }
 }
 
