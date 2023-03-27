@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Header from './Header';
 import BattleConsole from './BattleConsole';
 import './css/App.css'

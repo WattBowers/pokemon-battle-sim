@@ -134,7 +134,7 @@ const BattleConsole = () => {
                         break;
                     case 4: 
                         setCombatText(`${userPokemon.name} dealt ${Math.round(currentAttack[0])} to the opponents ${computerPokemon.name}`);
-                        setComputerHp(computerHp - currentAttack[0])
+                        setComputerHp(checkIfHpIsZero(computerHp - currentAttack[0]))
                         break;
                     
                     case 5: 
@@ -149,6 +149,9 @@ const BattleConsole = () => {
                             setCombatStep(0)
                         }
                         break;
+                    
+                    default: 
+                        throw new Error('Unexpected value in text input')
                 }
             } else if (currentPokemon === 'computer') {
                 switch(combatStep) {
@@ -176,7 +179,7 @@ const BattleConsole = () => {
                         
                     case 4: 
                         setCombatText(`${computerPokemon.name} dealt ${Math.round(currentAttack[0])} to your ${userPokemon.name}`);
-                        setUserHp(userHp - currentAttack[0])
+                        setUserHp(checkIfHpIsZero(userHp - currentAttack[0]))
                         break;
 
                     case 5: 
@@ -192,6 +195,9 @@ const BattleConsole = () => {
                             setCombatStep(0)
                         }
                         break;
+                    
+                    default: 
+                        throw new Error('Unexpected value in text input');
                 }
             }    
         }        
