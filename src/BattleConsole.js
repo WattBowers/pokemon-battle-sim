@@ -182,9 +182,9 @@ const BattleConsole = () => {
                     
                     case 3: 
                         if(currentAttack[1] === true) {
-                            setCombatText(`critical hit!!!`);
+                            dispatch({ type: 'setCombatText', payload: `Critical hit!!!`})
                         } else{
-                            setCombatStep(4)
+                            dispatch({ type: 'setCombatStep', payload: 4})
                         }
                         break;
                     case 4: 
@@ -198,10 +198,15 @@ const BattleConsole = () => {
                             setCurrentPokemon('computer');
                             setStartOrEnd('end');
                             setCombatStep(1)
+
+                            dispatch({ type: 'setCurrentAttack', payload: attack(userPokemon, computerPokemon, computerPokemon.moveArr[Math.floor(Math.random() * 3)])})
+                            dispatch({ type: 'setCurrentPokemon', payload: 'user'})
+                            dispatch({ type: 'setStartOrEnd', payload: 'end'})
+                            dispatch({ type: 'setCombatStep', payload: 1})
                         } else {
                             setCombatText('');
-                            setCurrentPokemon('');
-                            setCombatStep(0)
+                            dispatch({ type: 'setCurrentPokemon', payload: ''})
+                            dispatch({ type: 'setCombatStep', payload: 0})
                         }
                         break;
                     
@@ -212,42 +217,42 @@ const BattleConsole = () => {
                 switch(combatStep) {
                     case 1: 
                         //setCombatText(`${computerPokemon.name} dealt ${Math.round(currentAttack[0])} to your ${userPokemon.name}`)
-                        setCombatText(`${computerPokemon.name} used ${currentAttack[3]}!!!`);
+                        dispatch({ type: 'setCombatText', payload: `${computerPokemon.name} used ${currentAttack[3]}!!!`})
                         break;
                     case 2: 
                         if(currentAttack[2] === 'super effective') {
-                            setCombatText(`It's super effective`);
+                            dispatch({ type: 'setCombatText', payload: `It's super effective`})
                         } else if (currentAttack[2] === 'not very effective') {
-                            setCombatText(`It's not very effective`);
+                            dispatch({ type: 'setCombatText', payload: `It's not very effective`})
                         } else {
-                            setCombatStep(3);
+                            dispatch({ type: 'setCombatStep', payload: 3});
                         }
                         break;
                     
                     case 3: 
                         if(currentAttack[1] === true) {
-                            setCombatText(`critical hit!!!`);
+                            dispatch({ type: 'setCombatText', payload: `Critical hit!!!`})
                         } else{
-                            setCombatStep(4)
+                            dispatch({ type: 'setCombatStep', payload: 4})
                         }
                         break;
                         
                     case 4: 
-                        setCombatText(`${computerPokemon.name} dealt ${Math.round(currentAttack[0])} to your ${userPokemon.name}`);
-                        setUserHp(checkIfHpIsZero(userHp - currentAttack[0]))
+                        dispatch({ type: 'setCombatText', payload: `${computerPokemon.name} dealt ${Math.round(currentAttack[0])} to your ${userPokemon.name}`});
+                        dispatch({ type: 'setUserHp', payload: checkIfHpIsZero(userHp - currentAttack[0])})
                         break;
 
                     case 5: 
                         
                         if(startOrEnd === 'start') {
-                            setCurrentAttack(attack(computerPokemon, userPokemon, userMove));
-                            setCurrentPokemon('user');
-                            setStartOrEnd('end');
-                            setCombatStep(1)
+                            dispatch({ type: 'setCurrentAttack', payload: attack(computerPokemon, userPokemon, userMove)})
+                            dispatch({ type: 'setCurrentPokemon', payload: 'user'})
+                            dispatch({ type: 'setStartOrEnd', payload: 'end'})
+                            dispatch({ type: 'setCombatStep', payload: 1})
                         } else {
-                            setCombatText('');
-                            setCurrentPokemon('');
-                            setCombatStep(0)
+                            dispatch({ type: 'setCombatText', payload: ``})
+                            dispatch({ type: 'setCurrentPokemon', payload: ``})
+                            dispatch({ type: 'setCombatStep', payload: 0})
                         }
                         break;
                     
@@ -285,7 +290,7 @@ const BattleConsole = () => {
                     {state.userPokemon.moveArr?.map(move => {
                         return <MoveButton idToAttack={attackClicked} move={move} />
                     })}
-                    <CombatText combatStep={state.combatStep} setCombatStep={setCombatStep} text={state.combatText}/>
+                    <CombatText combatStep={state.combatStep} dispatch={dispatch} text={state.combatText}/>
                 </div>
             )
         }
