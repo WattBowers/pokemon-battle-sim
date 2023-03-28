@@ -1,8 +1,10 @@
+import './css/combatText.css'
+
 const CombatText = ({ text, dispatch, combatStep }) => {
     
     
     return(
-        <p onClick={() => dispatch({ type: 'setCombatStep', payload: combatStep + 1 })}>{text}</p>
+        <p className="combatText" onClick={() => dispatch({ type: 'setCombatStep', payload: combatStep + 1 })}>{text}</p>
     )
     
 }

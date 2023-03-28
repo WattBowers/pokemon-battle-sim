@@ -14,7 +14,7 @@ const checkMatchup = (moveType, defensiveType) => {
 
 export const attack = (defender, attacker, move) => {
     //check and see if the move is a physical move or a special move
-    console.log(move)
+    
     if(move[3] === 'physical') {
         //check how effective the move is against the opponent
         const damageArr = damageCalc(move[1], defender.stats[2], attacker.stats[1])
@@ -32,7 +32,7 @@ export const attack = (defender, attacker, move) => {
 
 export const checkIfHpIsZero = (currentHp, damage) => {
     if((currentHp - damage) > 0) {
-        return Math.round(currentHp - damage)
+        return currentHp - damage
     } else {
         return 0;
     }

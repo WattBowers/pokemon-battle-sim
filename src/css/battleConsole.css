@@ -7,4 +7,36 @@ figure {
     display: flex;
     flex-direction: column;
     align-items: center;
+    background-color: rgba(166, 166, 166, 0.5);
+    margin-top: 50px;
+    padding: 25px;
+    border-radius: 1%;
+}
+
+.computerPoke {
+    align-self: flex-end;
+    position: relative;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.computerPoke p {
+    position: relative;
+    bottom: 20px;
+    font-size: .8rem;
+}
+
+.userPoke {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userPoke p {
+    position: relative;
+    top: 20px;
+    font-size: .8rem;
 }

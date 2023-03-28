@@ -12,14 +12,16 @@ const initialState = {
     userPokemon: {},
     computerPokemon: {},
     currentAttack: [],
-    firstInRound: true,
     userHp: 0,
     computerHp: 0,
     currentPokemon: '',
     userMove: [],
     combatText: '',
     combatStep: 0,
-    setCurrentPokemon: ''
+    setCurrentPokemon: '',
+    tryAgainButton: false,
+    renderChooseYourStarterButtons: true,
+    maxHp: []
 }
 
 const reducer = (state, action) => {
@@ -55,12 +57,24 @@ const reducer = (state, action) => {
         case 'setCombatText':
                 return {...state, combatText: action.payload}
         
-        case 'firstInRound':
-            return {...state, firstInRound: action.payload}
-        
         case 'setCurrentPokemon':
             return {...state, currentPokemon: action.payload}
-        
+
+        case 'setTryAgainButton':
+            return {...state, tryAgainButton: action.payload}
+
+        case 'setRenderChooseYourStarterButtons':
+            return {...state, renderChooseYourStarterButtons: action.payload}
+
+        case 'setComputerMaxHp':
+            return {...state, maxHp: [...state.maxHp, action.payload]}
+
+        case 'setUserMaxHp':
+            return {...state, maxHp: [...state.maxHp, action.payload]}            
+
+        case 'reset':
+            return initialState
+            
         default: 
             throw new Error('state updater received unknown function')
             
@@ -69,7 +83,7 @@ const reducer = (state, action) => {
 
 
 const BattleConsole = () => {
-    
+
     const attackClicked = (move) => {
         //debugger;
         dispatch({ type: 'setUserMove', payload: move })
@@ -78,11 +92,11 @@ const BattleConsole = () => {
         //set the fastest pokemon to the first in the order
         if(speedArr[0] === 'user') {
             dispatch({ type: 'setCurrentPokemon', payload: 'user'})
-            console.log(attack(state.computerPokemon, state.userPokemon, move))
+            
             dispatch({ type: 'setCurrentAttack', payload: attack(state.computerPokemon, state.userPokemon, move)})
         } else {
             dispatch({ type: 'setCurrentPokemon', payload: 'computer'})
-            console.log(attack(state.userPokemon, state.computerPokemon, state.computerPokemon.moveArr[Math.floor(Math.random() * 3)]))
+            
             dispatch({type: 'setCurrentAttack', payload: attack(state.userPokemon, state.computerPokemon, state.computerPokemon.moveArr[Math.floor(Math.random() * 3)])})
         }
 
@@ -96,14 +110,17 @@ const BattleConsole = () => {
     const [state, dispatch] = useReducer(reducer, initialState)
 
     useEffect(() => {
-        const idArr = [1, 4, 7]
-        idArr.forEach(id => {
-            axios.get(`https://pokeapi.co/api/v2/pokemon/${id}/`)
-                .then(({ data }) => {
-                    dispatch({ type: 'setPokemon', payload: new Pokemon(data.name, data.types, data.stats, data.sprites.front_default, data.sprites.back_default, data.moves)})
+        if(state.pokemon.length === 0) {
+            const idArr = [1, 4, 7]
+            idArr.forEach(id => {
+                axios.get(`https://pokeapi.co/api/v2/pokemon/${id}/`)
+                    .then(({ data }) => {
+                        dispatch({ type: 'setPokemon', payload: new Pokemon(data.name, data.types, data.stats, data.sprites.front_default, data.sprites.back_default,   data.moves)})
             })
         })
-    }, [])
+    }
+        
+    }, [state.pokemon])
 
     useEffect(() => {
         dispatch({ type: 'setComputerPokemon', payload: state.pokemon[Math.floor(Math.random() * 3)] });
@@ -113,9 +130,10 @@ const BattleConsole = () => {
         if(Object.keys(state.userPokemon).length !== 0 && state.userPokemon.statsUpdated === false) {
             
             //setting the users Hp
-            console.log(hpCalc(state.userPokemon.stats[0].base_stat))
+            
             const hp = hpCalc(state.userPokemon.stats[0].base_stat)
             dispatch({ type: 'setUserHp', payload: hp})
+            dispatch({ type: 'setUserMaxHp', payload: hp });
             const statsArr = []
             
             //looping through the rest of the stats and setting them to state 
@@ -139,6 +157,7 @@ const BattleConsole = () => {
             //setting the users Hp
             const hp = hpCalc(state.computerPokemon.stats[0].base_stat)
             dispatch({ type: 'setComputerHp', payload: hp });
+            dispatch({ type: 'setComputerMaxHp', payload: hp });
             const statsArr = []
             
             //looping through the rest of the stats and setting them to state 
@@ -181,11 +200,16 @@ const BattleConsole = () => {
                         }
                         break;
                     case 4: 
+                        
                         dispatch({ type: 'setCombatText', payload: `${state.userPokemon.name} dealt ${Math.round(state.currentAttack[0])} to the opponents ${state.computerPokemon.name}`});
-                        dispatch({ type: 'setUserHp', payload: checkIfHpIsZero(state.computerHp - state.currentAttack[0])})
+                        dispatch({ type: 'setComputerHp', payload: checkIfHpIsZero(state.computerHp, state.currentAttack[0])})
                         break;
                     
                     case 5: 
+                        if(state.computerHp === 0) {
+                            dispatch({ type: 'setCombatStep', payload: 6})
+                            break;
+                        }
                         if(state.startOrEnd === 'start') {
                             dispatch({ type: 'setCurrentAttack', payload: attack(state.userPokemon, state.computerPokemon, state.computerPokemon.moveArr[Math.floor(Math.random() * 3)])})
                             dispatch({ type: 'setCurrentPokemon', payload: 'computer'})
@@ -197,9 +221,19 @@ const BattleConsole = () => {
                             dispatch({ type: 'setCombatStep', payload: 0})
                         }
                         break;
+
+                    case 6: 
+                        dispatch({ type: 'setCombatText', payload: `Congratulations, you've won`})
+                        break;
+                    
+                    case 7: 
+                        dispatch({ type: 'setCombatText', payload: ``})
+                        dispatch({ type: 'setCombatStep', payload: 8})
+                        dispatch({ type: 'setTryAgainButton', payload: true })
+                        break; 
                     
                     default: 
-                        throw new Error('Unexpected value in text input')
+                        break;
                 }
             } else if (state.currentPokemon === 'computer') {
                 switch(state.combatStep) {
@@ -227,11 +261,15 @@ const BattleConsole = () => {
                         
                     case 4: 
                         dispatch({ type: 'setCombatText', payload: `${state.computerPokemon.name} dealt ${Math.round(state.currentAttack[0])} to your ${state.userPokemon.name}`});
-                        dispatch({ type: 'setUserHp', payload: checkIfHpIsZero(state.userHp - state.currentAttack[0])})
+                        dispatch({ type: 'setUserHp', payload: checkIfHpIsZero(state.userHp, state.currentAttack[0])})
+                        
                         break;
 
                     case 5: 
-                        
+                        if(state.userHp === 0) {
+                            dispatch({ type: 'setCombatStep', payload: 6})
+                            break;
+                        }
                         if(state.startOrEnd === 'start') {
                             dispatch({ type: 'setCurrentAttack', payload: attack(state.computerPokemon, state.userPokemon, state.userMove)})
                             dispatch({ type: 'setCurrentPokemon', payload: 'user'})
@@ -244,46 +282,68 @@ const BattleConsole = () => {
                         }
                         break;
                     
+                    case 6: 
+                        dispatch({ type: 'setCombatText', payload: `Sorry, you've lost`})
+                        break;
+                    
+                    case 7: 
+                        dispatch({ type: 'setCombatText', payload: ``})
+                        dispatch({ type: 'setCombatStep', payload: 8})
+                        dispatch({ type: 'setTryAgainButton', payload: true })
+                        break; 
+
                     default: 
                         break;
                 }
             }    
         }        
-    }, [state.combatStep, state.computerHp , state.computerPokemon , state.currentAttack, state.currentPokemon, state.startOrEnd, state.userHp, state.userMove, state.userPokemon,])
-
-
-    //debugger;
-    if (state.pokemon.length > 0) {
-        if(Object.keys(state.userPokemon).length === 0) {
-           return(
-                <>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.combatStep])
+    
+    return (
+        <main className='wrapper'>
+            {state.renderChooseYourStarterButtons  ? 
+                <div>
+                    <p>Choose a pokemon</p>
                     {state.pokemon.map(pokemon => {   
                         return(
-                            <main>
-                                <p>Choose a pokemon</p>
-                                <button onClick={() => dispatch({ type: 'setUserPokemon', payload: pokemon})}>{pokemon.name}</button>
-                            </main>
+                            <div key={pokemon.name}>
+                                <button onClick={() => {
+                                    dispatch({ type: 'setUserPokemon', payload: pokemon});
+
+                                    dispatch({ type: 'setRenderChooseYourStarterButtons', payload: false })
+
+                                }}>{pokemon.name}</button>
+                            </div>
                         )
                     })}
-                </> 
-            )
-            
-        } else {
-            return(
-                <div className='centeredPokes'>
-                    <figure><img src={state.computerPokemon.frontSprite} alt="" /></figure>
-                    <p>Health: {state.computerHp}</p>
-                    <figure><img src={state.userPokemon.backSprite} alt="" /></figure>
-                    <p>Health: {state.userHp}</p>
-                    {state.userPokemon.moveArr?.map(move => {
-                        return <MoveButton idToAttack={attackClicked} move={move} />
-                    })}
-                    <CombatText combatStep={state.combatStep} dispatch={dispatch} text={state.combatText}/>
                 </div>
-            )
-        }
-
-    }
+                
+             : 
+                <div className='centeredPokes'>
+                    <div className='computerPoke'>
+                        <figure><img src={state.computerPokemon.frontSprite} alt="" /></figure>
+                        <p>Health: {state.computerHp} / {state.maxHp[0]}</p>
+                    </div>
+                    <div className='userPoke'>
+                        <p>Health: {state.userHp} / {state.maxHp[1]}</p>
+                        <figure><img src={state.userPokemon.backSprite} alt="" /></figure>
+                    </div>
+                    <div>
+                        {state.userPokemon.moveArr?.map(move => {
+                            return <MoveButton combatStep={state.combatStep} key={move[0]} idToAttack={attackClicked} move={move} />
+                        })}
+                    </div>
+                    <CombatText combatStep={state.combatStep} dispatch={dispatch} text={state.combatText}/>
+                    {state.tryAgainButton 
+                        ? <button onClick={() => dispatch({ type: 'reset' })}>Try again??</button>
+                        : null
+                    }
+                </div>
+            }
+        </main>
+        
+    )
 }
 
 export default BattleConsole

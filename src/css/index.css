@@ -1,6 +1,6 @@
 .wrapper {
     max-width: 1600px;
-    width: 90%;
+    width: 60%;
     margin: 0 auto;
     height: 100%;
 }
@@ -19,4 +19,5 @@ img {
 html {
     font-size: 125%;
     line-height: 1;
+    font-family: 'Press Start 2P', cursive;
 }
