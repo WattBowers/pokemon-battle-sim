@@ -1,8 +1,8 @@
-const CombatText = ({ text, setCombatStep, combatStep }) => {
+const CombatText = ({ text, dispatch, combatStep }) => {
     
     
     return(
-        <p onClick={() => setCombatStep(combatStep + 1)}>{text}</p>
+        <p onClick={() => dispatch({ type: 'setCombatStep', payload: combatStep + 1 })}>{text}</p>
     )
     
 }
