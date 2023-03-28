@@ -1,14 +1,17 @@
 .buttonFlex {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .btn {
     background-color: rgb(240,247,249);
     border: 1px solid grey;
     padding: 5px;
-    margin: 0 5px 0 5px; 
+    margin: 10px; 
     font-family: 'Press Start 2P', cursive;
+    width: calc(50% - 20px);
+    color: black
 }
 
 .btn:hover {
@@ -19,7 +22,15 @@
 @media(max-width: 750px) {
     .btn {
         font-size: .8rem;
-        margin: 10px; 
-        width: calc(50%-10px)
+    }
+}
+
+@media(max-width: 485px) {
+    .buttonFlex {
+        flex-direction: column;
+        
+    }
+    .btn {
+        width: 100%;
     }
 }

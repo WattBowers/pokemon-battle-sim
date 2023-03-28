@@ -70,6 +70,22 @@ main {
     flex-direction: row;
 }
 
+.selectBtn {
+    background-color: rgb(240,247,249);
+    border: 1px solid grey;
+    padding: 5px;
+    margin: 10px; 
+    font-family: 'Press Start 2P', cursive;
+    width: 80%;
+    color: black
+}
+
+.selectBtn:hover {
+    background-color: black;
+    color: rgb(240,247,249);;
+}
+
+
 @media(max-width: 815px) {
     .pokemonButtonFlex {
         flex-direction: column;

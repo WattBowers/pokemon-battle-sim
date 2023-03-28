@@ -309,7 +309,7 @@ const BattleConsole = () => {
                         {state.pokemon.map(pokemon => {   
                             return(
                                 <div  key={pokemon.name}>
-                                    <button className='btn' onClick={() => {
+                                    <button className='selectBtn' onClick={() => {
                                         dispatch({ type: 'setUserPokemon', payload: pokemon});
                                         dispatch({ type: 'setRenderChooseYourStarterButtons', payload: false })
 
