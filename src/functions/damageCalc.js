@@ -2,7 +2,6 @@ const crit = () => {
     const roll = Math.floor(Math.random() * 24)
 
     if (roll === 23) {
-        console.log('crit!!!')
         return [2, true]
     } else {
         return [1, false]

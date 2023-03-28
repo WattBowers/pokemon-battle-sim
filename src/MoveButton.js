@@ -1,4 +1,4 @@
-import './css/moveButton.css'
+import './css/index.css';
 
 
 const MoveButton = ({ move, idToAttack, combatStep }) => {

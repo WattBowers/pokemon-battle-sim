@@ -1,6 +1,6 @@
 import Header from './Header';
 import BattleConsole from './BattleConsole';
-import './css/App.css'
+import './css/index.css';
 
 function App() {
   return (

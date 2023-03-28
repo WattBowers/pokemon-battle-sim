@@ -1,4 +1,4 @@
-import './css/battleConsole.css';
+import './css/index.css';
 import axios from 'axios';
 import { useEffect, useReducer } from 'react';
 import { Pokemon } from './functions/classes';
@@ -303,7 +303,7 @@ const BattleConsole = () => {
     return (
         <main className='wrapper'>
             {state.renderChooseYourStarterButtons  ? 
-                <div className='pokemonSelectFlex'>
+                <section className='pokemonSelectFlex'>
                     <p>Choose a pokemon</p>
                     <div className='pokemonButtonFlex'>
                         {state.pokemon.map(pokemon => {   
@@ -315,35 +315,35 @@ const BattleConsole = () => {
 
                                     }}>{pokemon.name}</button>
                                     <figure>
-                                        <img src={pokemon.frontSprite} alt="" />
+                                        <img src={pokemon.frontSprite} alt="pokemon sprite" />
                                     </figure>
                                 </div>
                             )
                         })}
                     </div>  
-                </div>
+                </section>
                 
              : 
-                <div className='centeredPokes'>
+                <section className='centeredPokes'>
                     <div className='computerPoke'>
-                        <figure><img src={state.computerPokemon.frontSprite} alt="" /></figure>
+                        <figure><img src={state.computerPokemon.frontSprite} alt="pokemon front sprite" /></figure>
                         <p>Health: {state.computerHp} / {state.maxHp[0]}</p>
                     </div>
                     <div className='userPoke'>
                         <p>Health: {state.userHp} / {state.maxHp[1]}</p>
-                        <figure><img src={state.userPokemon.backSprite} alt="" /></figure>
+                        <figure><img src={state.userPokemon.backSprite} alt="pokemon back sprite" /></figure>
                     </div>
+                    <CombatText combatStep={state.combatStep} dispatch={dispatch} text={state.combatText}/>
                     <div className='buttonFlex'>
                         {state.userPokemon.moveArr?.map(move => {
                             return <MoveButton combatStep={state.combatStep} key={move[0]} idToAttack={attackClicked} move={move} />
                         })}
                     </div>
-                    <CombatText combatStep={state.combatStep} dispatch={dispatch} text={state.combatText}/>
                     {state.tryAgainButton 
                         ? <button className='btn' onClick={() => dispatch({ type: 'reset' })}>Try again??</button>
                         : null
                     }
-                </div>
+                </section>
             }
         </main>
         

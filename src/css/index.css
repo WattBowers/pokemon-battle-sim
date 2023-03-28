@@ -11,6 +11,7 @@ html { box-sizing: border-box;}
     width: 90%;
     margin: 0 auto;
     height: 100%;
+    position: relative;
 }
 
 * {
@@ -33,4 +34,193 @@ html {
 html, body {
     max-width: 100%;
     
+}
+
+body {
+    background-color: rgb(240,247,249);
+}
+
+figure {
+    height: 200px;
+    width: 200px;
+}
+
+
+header {
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    color: rgb(240,247,249);
+    padding: 20px 0 20px 0;
+}
+
+
+main {
+    display: flex;
+    justify-content: center;
+    min-height: 500px;
+    overflow-x: hidden;
+}
+
+.centeredPokes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: rgba(166, 166, 166, 0.5);
+    margin-top: 50px;
+    padding: 25px;
+    border-radius: 1%;
+    max-width: 700px;
+    min-width: 700px;
+}
+
+.computerPoke {
+    align-self: flex-end;
+    position: relative;
+    bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.computerPoke p {
+    position: relative;
+    bottom: 20px;
+    font-size: .8rem;
+    min-width: 240px;
+    max-width: 240px;
+}
+
+.userPoke {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.userPoke p {
+    position: relative;
+    top: 20px;
+    font-size: .8rem;
+    min-width: 240px;
+    max-width: 240px;
+}
+
+.pokemonSelectFlex {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+.pokemonSelectFlex p {
+    margin-bottom: 50px;
+}
+
+.pokemonButtonFlex {
+    display: flex;
+    flex-direction: row;
+}
+
+.selectBtn {
+    background-color: rgb(240,247,249);
+    border: 1px solid grey;
+    padding: 5px;
+    margin: 10px; 
+    font-family: 'Press Start 2P', cursive;
+    width: 80%;
+    color: black
+}
+
+.selectBtn:hover {
+    background-color: black;
+    color: rgb(240,247,249);;
+}
+
+.buttonFlex {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn {
+    background-color: rgb(240,247,249);
+    border: 1px solid grey;
+    padding: 5px;
+    margin: 10px; 
+    font-family: 'Press Start 2P', cursive;
+    width: calc(50% - 20px);
+    color: black
+}
+
+.btn:hover {
+    background-color: black;
+    color: rgb(240,247,249);;
+}
+
+.combatText {
+    margin-bottom: 20px;
+    text-align: center;
+    user-select: none;
+    font-family: 'Press Start 2P', cursive;
+    background-color: transparent;
+    border: none;
+    font-size: 1rem;
+    position: absolute;
+    bottom: 120px;
+    max-width: 650px;
+}
+
+@media(max-width: 815px) {
+    .pokemonButtonFlex {
+        flex-direction: column;
+    }
+
+    .pokemonSelectFlex p {
+        margin: 30px 0 30px 0;
+    }
+    h1 {
+        text-align: center;
+    }
+    
+}
+
+
+@media(max-width: 750px) {
+    .centeredPokes {
+        max-width: 500px;
+        min-width: 500px;
+    }
+    .btn {
+        font-size: .8rem;
+    }
+    .combatText {
+        max-width: 450px;
+        font-size: .8rem;
+    }
+}
+
+@media(max-width: 485px) {
+    .centeredPokes {
+        max-width: 300px;
+        min-width: 300px;
+    }
+    .computerPoke, .userPoke {
+        align-self: center;
+    }
+    .buttonFlex {
+        flex-direction: column;
+        
+    }
+    .btn {
+        width: 100%;
+    }
+    .combatText {
+        max-width: 280px;
+        font-size: .6rem;
+        bottom: 225px;
+    }
+    header {
+        display: none;
+    }
 }

@@ -1,10 +1,10 @@
-import './css/combatText.css'
+import './css/index.css';
 
 const CombatText = ({ text, dispatch, combatStep }) => {
     
     
     return(
-        <p className="combatText" onClick={() => dispatch({ type: 'setCombatStep', payload: combatStep + 1 })}>{text}</p>
+        <button className="combatText" onClick={() => dispatch({ type: 'setCombatStep', payload: combatStep + 1 })}>{text}</button>
     )
     
 }
