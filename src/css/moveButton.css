@@ -1,7 +1,25 @@
+.buttonFlex {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .btn {
     background-color: rgb(240,247,249);
     border: 1px solid grey;
     padding: 5px;
     margin: 0 5px 0 5px; 
     font-family: 'Press Start 2P', cursive;
+}
+
+.btn:hover {
+    background-color: black;
+    color: rgb(240,247,249);;
+}
+
+@media(max-width: 750px) {
+    .btn {
+        font-size: .8rem;
+        margin: 10px; 
+        width: calc(50%-10px)
+    }
 }

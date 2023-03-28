@@ -3,6 +3,13 @@ figure {
     width: 200px;
 }
 
+main {
+    display: flex;
+    justify-content: center;
+    min-height: 500px;
+    overflow-x: hidden;
+}
+
 .centeredPokes {
     display: flex;
     flex-direction: column;
@@ -11,6 +18,8 @@ figure {
     margin-top: 50px;
     padding: 25px;
     border-radius: 1%;
+    max-width: 700px;
+    min-width: 700px;
 }
 
 .computerPoke {
@@ -26,6 +35,8 @@ figure {
     position: relative;
     bottom: 20px;
     font-size: .8rem;
+    min-width: 240px;
+    max-width: 240px;
 }
 
 .userPoke {
@@ -39,4 +50,50 @@ figure {
     position: relative;
     top: 20px;
     font-size: .8rem;
+    min-width: 240px;
+    max-width: 240px;
+}
+
+.pokemonSelectFlex {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+.pokemonSelectFlex p {
+    margin-bottom: 50px;
+}
+
+.pokemonButtonFlex {
+    display: flex;
+    flex-direction: row;
+}
+
+@media(max-width: 815px) {
+    .pokemonButtonFlex {
+        flex-direction: column;
+    }
+
+    .pokemonSelectFlex p {
+        margin: 30px 0 30px 0;
+    }
+}
+
+
+@media(max-width: 750px) {
+    .centeredPokes {
+        max-width: 500px;
+        min-width: 500px;
+    }
+}
+
+@media(max-width: 485px) {
+    .centeredPokes {
+        max-width: 300px;
+        min-width: 300px;
+    }
+    .computerPoke, .userPoke {
+        align-self: center;
+    }
 }

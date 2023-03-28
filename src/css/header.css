@@ -5,3 +5,9 @@ header {
     color: rgb(240,247,249);
     padding: 20px 0 20px 0;
 }
+
+@media (max-width: 815px) {
+    h1 {
+        text-align: center;
+    }
+}

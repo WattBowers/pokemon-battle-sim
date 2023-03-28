@@ -1,11 +1,11 @@
 import './css/battleConsole.css';
 import axios from 'axios';
 import { useEffect, useReducer } from 'react';
-import { Pokemon } from './classes';
-import { hpCalc, statCalc } from './statCalc';
+import { Pokemon } from './functions/classes';
+import { hpCalc, statCalc } from './functions/statCalc';
 import MoveButton from './MoveButton';
 import CombatText from './CombatText';
-import { attack, checkIfHpIsZero, compareSpeed } from './attack';
+import { attack, checkIfHpIsZero, compareSpeed } from './functions/attack';
 
 const initialState = {
     pokemon: [],
@@ -179,14 +179,14 @@ const BattleConsole = () => {
             if(state.currentPokemon === 'user') {
                 switch(state.combatStep) {
                     case 1: 
-                        dispatch({ type: 'setCombatText', payload: `${state.userPokemon.name} used ${state.currentAttack[3]}!!!`})
+                        dispatch({ type: 'setCombatText', payload: `${state.userPokemon.name} used ${state.currentAttack[3]}!!! ➔`})
                         break;
                     
                     case 2: 
                         if(state.currentAttack[2] === 'super effective') {
-                            dispatch({ type: 'setCombatText', payload: `It's super effective!!!`})
+                            dispatch({ type: 'setCombatText', payload: `It's super effective!!! ➔`})
                         } else if (state.currentAttack[2] === 'not very effective') {
-                            dispatch({ type: 'setCombatText', payload: `It's not very effective`})
+                            dispatch({ type: 'setCombatText', payload: `It's not very effective ➔`})
                         } else {
                             dispatch({ type: 'setCombatStep', payload: 3})
                         }
@@ -194,14 +194,14 @@ const BattleConsole = () => {
                     
                     case 3: 
                         if(state.currentAttack[1] === true) {
-                            dispatch({ type: 'setCombatText', payload: `Critical hit!!!`})
+                            dispatch({ type: 'setCombatText', payload: `Critical hit!!! ➔`})
                         } else{
                             dispatch({ type: 'setCombatStep', payload: 4})
                         }
                         break;
                     case 4: 
                         
-                        dispatch({ type: 'setCombatText', payload: `${state.userPokemon.name} dealt ${Math.round(state.currentAttack[0])} to the opponents ${state.computerPokemon.name}`});
+                        dispatch({ type: 'setCombatText', payload: `${state.userPokemon.name} dealt ${Math.round(state.currentAttack[0])} to the opponents ${state.computerPokemon.name} ➔`});
                         dispatch({ type: 'setComputerHp', payload: checkIfHpIsZero(state.computerHp, state.currentAttack[0])})
                         break;
                     
@@ -223,7 +223,7 @@ const BattleConsole = () => {
                         break;
 
                     case 6: 
-                        dispatch({ type: 'setCombatText', payload: `Congratulations, you've won`})
+                        dispatch({ type: 'setCombatText', payload: `Congratulations, you've won ➔`})
                         break;
                     
                     case 7: 
@@ -239,13 +239,13 @@ const BattleConsole = () => {
                 switch(state.combatStep) {
                     case 1: 
                         //setCombatText(`${computerPokemon.name} dealt ${Math.round(currentAttack[0])} to your ${userPokemon.name}`)
-                        dispatch({ type: 'setCombatText', payload: `${state.computerPokemon.name} used ${state.currentAttack[3]}!!!`})
+                        dispatch({ type: 'setCombatText', payload: `${state.computerPokemon.name} used ${state.currentAttack[3]}!!! ➔`})
                         break;
                     case 2: 
                         if(state.currentAttack[2] === 'super effective') {
-                            dispatch({ type: 'setCombatText', payload: `It's super effective`})
+                            dispatch({ type: 'setCombatText', payload: `It's super effective ➔`})
                         } else if (state.currentAttack[2] === 'not very effective') {
-                            dispatch({ type: 'setCombatText', payload: `It's not very effective`})
+                            dispatch({ type: 'setCombatText', payload: `It's not very effective ➔`})
                         } else {
                             dispatch({ type: 'setCombatStep', payload: 3});
                         }
@@ -260,7 +260,7 @@ const BattleConsole = () => {
                         break;
                         
                     case 4: 
-                        dispatch({ type: 'setCombatText', payload: `${state.computerPokemon.name} dealt ${Math.round(state.currentAttack[0])} to your ${state.userPokemon.name}`});
+                        dispatch({ type: 'setCombatText', payload: `${state.computerPokemon.name} dealt ${Math.round(state.currentAttack[0])} to your ${state.userPokemon.name} ➔`});
                         dispatch({ type: 'setUserHp', payload: checkIfHpIsZero(state.userHp, state.currentAttack[0])})
                         
                         break;
@@ -283,7 +283,7 @@ const BattleConsole = () => {
                         break;
                     
                     case 6: 
-                        dispatch({ type: 'setCombatText', payload: `Sorry, you've lost`})
+                        dispatch({ type: 'setCombatText', payload: `Sorry, you've lost ➔`})
                         break;
                     
                     case 7: 
@@ -303,20 +303,24 @@ const BattleConsole = () => {
     return (
         <main className='wrapper'>
             {state.renderChooseYourStarterButtons  ? 
-                <div>
+                <div className='pokemonSelectFlex'>
                     <p>Choose a pokemon</p>
-                    {state.pokemon.map(pokemon => {   
-                        return(
-                            <div key={pokemon.name}>
-                                <button onClick={() => {
-                                    dispatch({ type: 'setUserPokemon', payload: pokemon});
+                    <div className='pokemonButtonFlex'>
+                        {state.pokemon.map(pokemon => {   
+                            return(
+                                <div  key={pokemon.name}>
+                                    <button className='btn' onClick={() => {
+                                        dispatch({ type: 'setUserPokemon', payload: pokemon});
+                                        dispatch({ type: 'setRenderChooseYourStarterButtons', payload: false })
 
-                                    dispatch({ type: 'setRenderChooseYourStarterButtons', payload: false })
-
-                                }}>{pokemon.name}</button>
-                            </div>
-                        )
-                    })}
+                                    }}>{pokemon.name}</button>
+                                    <figure>
+                                        <img src={pokemon.frontSprite} alt="" />
+                                    </figure>
+                                </div>
+                            )
+                        })}
+                    </div>  
                 </div>
                 
              : 
@@ -329,14 +333,14 @@ const BattleConsole = () => {
                         <p>Health: {state.userHp} / {state.maxHp[1]}</p>
                         <figure><img src={state.userPokemon.backSprite} alt="" /></figure>
                     </div>
-                    <div>
+                    <div className='buttonFlex'>
                         {state.userPokemon.moveArr?.map(move => {
                             return <MoveButton combatStep={state.combatStep} key={move[0]} idToAttack={attackClicked} move={move} />
                         })}
                     </div>
                     <CombatText combatStep={state.combatStep} dispatch={dispatch} text={state.combatText}/>
                     {state.tryAgainButton 
-                        ? <button onClick={() => dispatch({ type: 'reset' })}>Try again??</button>
+                        ? <button className='btn' onClick={() => dispatch({ type: 'reset' })}>Try again??</button>
                         : null
                     }
                 </div>
