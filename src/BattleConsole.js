@@ -21,7 +21,8 @@ const initialState = {
     setCurrentPokemon: '',
     tryAgainButton: false,
     renderChooseYourStarterButtons: true,
-    maxHp: []
+    computerMaxHp: 0,
+    userMaxHp: 0
 }
 
 const reducer = (state, action) => {
@@ -67,10 +68,10 @@ const reducer = (state, action) => {
             return {...state, renderChooseYourStarterButtons: action.payload}
 
         case 'setComputerMaxHp':
-            return {...state, maxHp: [...state.maxHp, action.payload]}
+            return {...state, computerMaxHp: action.payload}  
 
         case 'setUserMaxHp':
-            return {...state, maxHp: [...state.maxHp, action.payload]}            
+            return {...state, userMaxHp: action.payload}            
 
         case 'reset':
             return initialState
@@ -154,7 +155,8 @@ const BattleConsole = () => {
     useEffect(() => {
         
         if(state.computerPokemon &&  Object.keys(state.computerPokemon).length !== 0 && state.computerPokemon.statsUpdated === false) {
-            //setting the users Hp
+            //setting the computers Hp
+            
             const hp = hpCalc(state.computerPokemon.stats[0].base_stat)
             dispatch({ type: 'setComputerHp', payload: hp });
             dispatch({ type: 'setComputerMaxHp', payload: hp });
@@ -327,10 +329,10 @@ const BattleConsole = () => {
                 <section className='centeredPokes'>
                     <div className='computerPoke'>
                         <figure><img src={state.computerPokemon.frontSprite} alt="pokemon front sprite" /></figure>
-                        <p>Health: {state.computerHp} / {state.maxHp[0]}</p>
+                        <p>Health: {state.computerHp} / {state.computerMaxHp}</p>
                     </div>
                     <div className='userPoke'>
-                        <p>Health: {state.userHp} / {state.maxHp[1]}</p>
+                        <p>Health: {state.userHp} / {state.userMaxHp}</p>
                         <figure><img src={state.userPokemon.backSprite} alt="pokemon back sprite" /></figure>
                     </div>
                     <CombatText combatStep={state.combatStep} dispatch={dispatch} text={state.combatText}/>
