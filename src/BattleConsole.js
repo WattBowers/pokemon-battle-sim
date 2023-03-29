@@ -9,6 +9,7 @@ import { attack, checkIfHpIsZero, compareSpeed } from './functions/attack';
 
 const initialState = {
     pokemon: [],
+    startOrEnd: '',
     userPokemon: {},
     computerPokemon: {},
     currentAttack: [],
@@ -84,7 +85,7 @@ const reducer = (state, action) => {
 
 
 const BattleConsole = () => {
-
+    //this function runs when the attack button is clicked. Its sets up which pokemon goes first in the order, sets the state to the correct moves and starts the combat step at one to display the text. 
     const attackClicked = (move) => {
         //debugger;
         dispatch({ type: 'setUserMove', payload: move })
@@ -100,7 +101,7 @@ const BattleConsole = () => {
             
             dispatch({type: 'setCurrentAttack', payload: attack(state.userPokemon, state.computerPokemon, state.computerPokemon.moveArr[Math.floor(Math.random() * 3)])})
         }
-
+        //make sure that both turns are taken one after the other by setting this to start
         dispatch({ type: 'setStartOrEnd', payload: 'start'})
         
         //set combat step to one. 
@@ -143,7 +144,7 @@ const BattleConsole = () => {
             }
             //adding hp stat to beginning of array
             statsArr.unshift(hp)
-            //setting state to new stats
+            //setting state to the updated stats
             const modifiedUserPokemon = { ...state.userPokemon, stats: statsArr, statsUpdated: true}
             
             dispatch({ type: 'setUserPokemon', payload: modifiedUserPokemon });
