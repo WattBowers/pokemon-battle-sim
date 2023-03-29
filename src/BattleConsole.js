@@ -27,7 +27,7 @@ const initialState = {
 }
 
 const reducer = (state, action) => {
-    //debugger;
+    
     switch(action.type) {
         case 'setPokemon':    
             return {...state, pokemon: [...state.pokemon, action.payload]}
@@ -87,7 +87,7 @@ const reducer = (state, action) => {
 const BattleConsole = () => {
     //this function runs when the attack button is clicked. Its sets up which pokemon goes first in the order, sets the state to the correct moves and starts the combat step at one to display the text. 
     const attackClicked = (move) => {
-        //debugger;
+        
         dispatch({ type: 'setUserMove', payload: move })
         // decide which pokemon should go first. 
         const speedArr = compareSpeed(state.userPokemon, state.computerPokemon)
@@ -113,10 +113,11 @@ const BattleConsole = () => {
 
     useEffect(() => {
         if(state.pokemon.length === 0) {
-            const idArr = [1, 4, 7]
+            const idArr = [1, 4, 7,]
             idArr.forEach(id => {
                 axios.get(`https://pokeapi.co/api/v2/pokemon/${id}/`)
                     .then(({ data }) => {
+                        console.log(data)
                         dispatch({ type: 'setPokemon', payload: new Pokemon(data.name, data.types, data.stats, data.sprites.front_default, data.sprites.back_default,   data.moves)})
             })
         })
@@ -177,8 +178,9 @@ const BattleConsole = () => {
 
     useEffect(() => {
         //make sure this doesn't run on page load. 
-       //debugger;
+       //This useEffect handles all of the logic for the turn system. You input the combatStep you are on and the switch statements will take care of updating state at the correct time.
         if(state.combatStep !== 0) {
+            //this if statement makes sure that the user and computer take their turns separately 
             if(state.currentPokemon === 'user') {
                 switch(state.combatStep) {
                     case 1: 
