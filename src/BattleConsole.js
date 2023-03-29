@@ -27,7 +27,6 @@ const initialState = {
 }
 
 const reducer = (state, action) => {
-    //debugger;
     switch(action.type) {
         case 'setPokemon':    
             return {...state, pokemon: [...state.pokemon, action.payload]}
@@ -87,7 +86,6 @@ const reducer = (state, action) => {
 const BattleConsole = () => {
     //this function runs when the attack button is clicked. Its sets up which pokemon goes first in the order, sets the state to the correct moves and starts the combat step at one to display the text. 
     const attackClicked = (move) => {
-        //debugger;
         dispatch({ type: 'setUserMove', payload: move })
         // decide which pokemon should go first. 
         const speedArr = compareSpeed(state.userPokemon, state.computerPokemon)
@@ -177,7 +175,6 @@ const BattleConsole = () => {
 
     useEffect(() => {
         //make sure this doesn't run on page load. 
-       //debugger;
         if(state.combatStep !== 0) {
             if(state.currentPokemon === 'user') {
                 switch(state.combatStep) {
